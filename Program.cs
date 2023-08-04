@@ -15,6 +15,7 @@ namespace Nuget.IdentityDatabase
             ContentJSON contentJSON = new();
             Сomposition comp1 = new()
             {
+                Defident = "Man",
                 Multiplier_A = "Socrates is a man",
                 Multiplier_B = "All men are mortal", // man are mortal
                 Premise = { }
@@ -52,9 +53,25 @@ namespace Nuget.IdentityDatabase
 
             Сomposition config_defaultGet = JsonConvert.DeserializeObject<Сomposition>(json);
             Сomposition configGet = JsonConvert.DeserializeObject<Сomposition>(contentJSON.Get_JSON(configurationPath, ""));
+                        
+            int index_Dfn1 = configGet.Multiplier_A.IndexOf(configGet.Defident);
+            int index_Dfn2 = configGet.Multiplier_B.IndexOf(configGet.Defident);
 
-            Console.WriteLine(config_defaultGet.Multiplier_A);
-            Console.WriteLine(configGet.Multiplier_A);
+            int dfdCharLength = configGet.Defident.Length;
+
+            string newString_Dfn1 = string.Empty;
+            string newString_Dfn2 = string.Empty;
+
+            if (index_Dfn1 > -1)
+                newString_Dfn1 = configGet.Multiplier_A.Remove(index_Dfn1, dfdCharLength);
+
+            if (index_Dfn2 > -1)
+                newString_Dfn2 = configGet.Multiplier_B.Remove(index_Dfn2, dfdCharLength);
+
+            Console.WriteLine("Dfd: {0}", configGet.Defident);
+            Console.WriteLine("Dfn 1: {0}", configGet.Multiplier_A);
+            Console.WriteLine("Dfn 2: {0}", configGet.Multiplier_B);
+            Console.WriteLine("Осмысленное произведение речи: {0}", newString_Dfn1 + newString_Dfn2);
             _ = Console.ReadLine();
         }
 
@@ -142,6 +159,11 @@ namespace Nuget.IdentityDatabase
     /// </summary>
     public class Сomposition
     {
+        /// <summary>
+        /// Дефиндент
+        /// </summary>
+        public string? Defident { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
