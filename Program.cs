@@ -13,20 +13,21 @@ namespace Nuget.IdentityDatabase
             string configurationPath = Path.Combine("Configuration.json");
 
             ContentJSON contentJSON = new();
-            Сomposition comp1 = new()
+
+            IDENTITY_DATABASE idb = new()
             {
                 Defident = "Man",
-                Multiplier_A = "Socrates is a man",
-                Multiplier_B = "All men are mortal", // man are mortal
+                MultiplierA = "Socrates is a man",
+                MultiplierB = "All men are mortal", // man are mortal
                 Premise = { }
             };
 
-            TrueStatement trueStatement = new()
+            DATA_Сomposition_Premise trueStatement = new()
             {
                 Proposition = "Socrates is mortal"
             };
 
-            string json = JsonConvert.SerializeObject(comp1, Formatting.Indented);            
+            string json = JsonConvert.SerializeObject(idb, Formatting.Indented);            
 
             // Copyright
             Console.WriteLine("{0} | Identity Database | INFO | IDB | InitCore() Copyright © 2023 WG Element.",
@@ -51,11 +52,9 @@ namespace Nuget.IdentityDatabase
                 }
             }
 
-            Сomposition config_defaultGet = JsonConvert.DeserializeObject<Сomposition>(json);
-            Сomposition configGet = JsonConvert.DeserializeObject<Сomposition>(contentJSON.Get_JSON(configurationPath, ""));
+            IDENTITY_DATABASE config_defaultGet = JsonConvert.DeserializeObject<IDENTITY_DATABASE>(json);
                         
-            int index_Dfn1 = configGet.Multiplier_A.IndexOf(configGet.Defident);
-            int index_Dfn2 = configGet.Multiplier_B.IndexOf(configGet.Defident);
+            DATA_Сomposition configGet = JsonConvert.DeserializeObject<DATA_Сomposition>(contentJSON.Get_JSON(configurationPath, "data[0]"));
 
             int dfdCharLength = configGet.Defident.Length;
 
@@ -63,14 +62,14 @@ namespace Nuget.IdentityDatabase
             string newString_Dfn2 = string.Empty;
 
             if (index_Dfn1 > -1)
-                newString_Dfn1 = configGet.Multiplier_A.Remove(index_Dfn1, dfdCharLength);
+                newString_Dfn1 = configGet.MultiplierA.Remove(index_Dfn1, dfdCharLength);
 
             if (index_Dfn2 > -1)
-                newString_Dfn2 = configGet.Multiplier_B.Remove(index_Dfn2, dfdCharLength);
+                newString_Dfn2 = configGet.MultiplierB.Remove(index_Dfn2, dfdCharLength);
 
             Console.WriteLine("Dfd: {0}", configGet.Defident);
-            Console.WriteLine("Dfn 1: {0}", configGet.Multiplier_A);
-            Console.WriteLine("Dfn 2: {0}", configGet.Multiplier_B);
+            Console.WriteLine("Dfn 1: {0}", configGet.MultiplierA);
+            Console.WriteLine("Dfn 2: {0}", configGet.MultiplierB);
             Console.WriteLine("Осмысленное произведение речи: {0}", newString_Dfn1 + newString_Dfn2);
             _ = Console.ReadLine();
         }
@@ -157,34 +156,44 @@ namespace Nuget.IdentityDatabase
     /// <summary>
     /// 
     /// </summary>
-    public class Сomposition
+    public partial class IDENTITY_DATABASE
     {
         /// <summary>
-        /// Дефиндент
+        /// 
         /// </summary>
-        public string? Defident { get; set; }
+        [JsonProperty("status", Required = Required.Always)]
+        public bool? Status { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string? Multiplier_A { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string? Multiplier_B { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public TrueStatement? Premise { get; set; }
+        [JsonProperty("data", Required = Required.Always)]
+        public List<DATA_Сomposition>? Data { get; set; }
     }
+
+        /// <summary>
+        /// 
+        /// </summary>
+    public partial class DATA_Сomposition
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("Branch_A", Required = Required.Always)]
+        public long[]? BranchA { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("Branch_B", Required = Required.Always)]
+        public long[]? BranchB { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
-    public class TrueStatement
-    {
+        [JsonProperty("Multiplier_A", Required = Required.Always)]
+        public string? MultiplierA { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
